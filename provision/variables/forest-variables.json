@@ -1,0 +1,9 @@
+{
+    "name": "example.loc",
+    "fqdn": "example.loc",
+    "netbiosName": "EXAMPLE",
+    "dn": "DC=example,DC=loc",
+    "administratorPassword": "wemustbesmartaboutourpassword1@",
+    "safeModeAdministratorPassword": "wemustbesmartaboutourpassword11@",
+    "dcIPAddress": "10.10.10.100"
+}

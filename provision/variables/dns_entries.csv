@@ -1,0 +1,6 @@
+HostName,IPEnd
+example,"200"
+SRV1,"150"
+WRK1,"200"
+za.example.loc,"101"
+example.loc,"100"

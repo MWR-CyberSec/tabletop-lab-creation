@@ -1,0 +1,117 @@
+{
+  "objects": [
+    {
+      "type": "ou",
+      "name": "Admins",
+      "path": ""
+    },
+    {
+      "type": "ou",
+      "name": "Tier 0 Admins",
+      "path": "OU=Admins,"
+    },
+    {
+      "type": "ou",
+      "name": "Tier 1 Admins",
+      "path": "OU=Admins,"
+    },
+    {
+      "type": "ou",
+      "name": "Tier 2 Admins",
+      "path": "OU=Admins,"
+    },
+    {
+      "type": "ou",
+      "name": "Groups",
+      "path": ""
+    },
+    {
+       "type": "group", 
+       "name": "Tier 0 Admins", 
+       "path": "OU=Groups,"
+    },
+    {
+       "type": "group", 
+       "name": "Tier 1 Admins", 
+       "path": "OU=Groups,"
+    },
+    {
+       "type": "group", 
+       "name": "Tier 2 Admins", 
+       "path": "OU=Groups,"
+    },
+    {
+      "type": "ou",
+      "name": "Servers",
+      "path": ""
+    },
+    {
+      "type": "ou",
+      "name": "Workstations",
+      "path": ""
+    },
+    {
+      "type": "ou",
+      "name": "Employees",
+      "path": ""
+    },
+    {
+      "type": "ou",
+      "name": "IT",
+      "path": "OU=Employees,"
+    },
+    {
+      "type": "ou",
+      "name": "Sales",
+      "path": "OU=Employees,"
+    },
+    {
+      "type": "ou",
+      "name": "Marketing",
+      "path": "OU=Employees,"
+    },
+    {
+      "type": "user",
+      "username": "t0_example.user",
+      "first": "Tier 0 Example",
+      "last": "User",
+      "path": "OU=Tier 0 Admins,OU=Admins,",
+      "title": "Domain Admins",
+      "department": "Administrators",
+      "password": "qKXtyL69UUm6zCE6zv3M#",
+      "groups": ["Tier 0 Admins"]
+    }, 
+    {
+      "type": "user",
+      "username": "t1_example.user",
+      "first": "Tier 1 Example",
+      "last": "User",
+      "path": "OU=Tier 1 Admins,OU=Admins,",
+      "title": "Server Admins",
+      "department": "Administrators",
+      "password": "4EbiC5fQve77GstzqpYy!",
+      "groups": ["Tier 1 Admins"]
+    },   
+    {
+      "type": "user",
+      "username": "t2_example.user",
+      "first": "Tier 2 Example",
+      "last": "User",
+      "path": "OU=Tier 2 Admins,OU=Admins,",
+      "title": "Workstation Admins",
+      "department": "Administrators",
+      "password": "HMZGdjtHTxeW5afnn9oA#",
+      "groups": ["Tier 2 Admins"]
+    },
+    {
+      "type": "user",
+      "username": "example.user",
+      "first": "Example",
+      "last": "User",
+      "path": "OU=IT,OU=Employees,",
+      "title": "IT Support Engineer",
+      "department": "IT",
+      "password": "RrueHnuQBq3BupHNJp38!"
+    }    
+  ]
+}

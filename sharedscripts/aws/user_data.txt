@@ -1,0 +1,61 @@
+<powershell>
+
+# Disable Complex Passwords
+# Reference: http://vlasenko.org/2011/04/27/removing-password-complexity-requirements-from-windows-server-2008-core/
+$seccfg = [IO.Path]::GetTempFileName()
+secedit /export /cfg $seccfg
+(Get-Content $seccfg) | Foreach-Object {$_ -replace "PasswordComplexity\s*=\s*1", "PasswordComplexity=0"} | Set-Content $seccfg
+secedit /configure /db $env:windir\security\new.sdb /cfg $seccfg /areas SECURITYPOLICY
+del $seccfg
+Write-Host "Complex Passwords have been disabled." -ForegroundColor Green
+
+# Create the Vagrant User
+net user vagrant vagrant /add
+net localgroup Administrators vagrant /add
+
+$ComputerName = $env:COMPUTERNAME
+$user = [adsi]"WinNT://$ComputerName/Administrator,user"
+$user.setpassword("VagrantRocks")
+
+# WinRM
+write-output "Setting up WinRM"
+write-host "(host) setting up WinRM"
+
+cmd.exe /c winrm quickconfig -q
+cmd.exe /c winrm quickconfig '-transport:http'
+cmd.exe /c winrm set "winrm/config" '@{MaxTimeoutms="1800000"}'
+cmd.exe /c winrm set "winrm/config/winrs" '@{MaxMemoryPerShellMB="1024"}'
+cmd.exe /c winrm set "winrm/config/service" '@{AllowUnencrypted="true"}'
+cmd.exe /c winrm set "winrm/config/client" '@{AllowUnencrypted="true"}'
+cmd.exe /c winrm set "winrm/config/service/auth" '@{Basic="true"}'
+cmd.exe /c winrm set "winrm/config/client/auth" '@{Basic="true"}'
+cmd.exe /c winrm set "winrm/config/service/auth" '@{CredSSP="true"}'
+cmd.exe /c winrm set "winrm/config/listener?Address=*+Transport=HTTP" '@{Port="5985"}'
+cmd.exe /c netsh advfirewall firewall set rule group="remote administration" new enable=yes
+cmd.exe /c netsh firewall add portopening TCP 5985 "Port 5985"
+cmd.exe /c net stop winrm
+cmd.exe /c sc config winrm start= auto
+cmd.exe /c net start winrm
+#Adding below lines for ssh configuration
+#cmd.exe /c Add-WindowsCapability -Online -Name OpenSSH.Server
+#cmd.exe /c start sshd
+#cmd.exe /c net user vagrant vagrant /add
+#cmd.exe /c net localgroup Administrators vagrant /add
+
+# Disable Internet Explorer Security
+# http://stackoverflow.com/a/9368555/2067999
+$AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+$UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 0
+Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 0
+
+# Do not combine taskbar buttons
+# http://superuser.com/a/741155
+Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name TaskbarGlomLevel -Value 1
+Get-Process -Name explorer | Stop-Process
+
+(iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1')))>$null 2>&1
+choco install GoogleChrome -y
+choco install babun -y
+
+</powershell>

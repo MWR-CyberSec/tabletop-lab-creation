@@ -1,0 +1,87 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+# Require the AWS provider plugin
+require 'vagrant-aws'
+# Example of using AWS as vagrant provisioner for the tabletop lab
+
+class Hash
+  def slice(*keep_keys)
+    h = {}
+    keep_keys.each { |key| h[key] = fetch(key) if has_key?(key) }
+    h
+  end unless Hash.method_defined?(:slice)
+  def except(*less_keys)
+    slice(*keys - less_keys)
+  end unless Hash.method_defined?(:except)
+end
+
+Vagrant.configure("2") do |cfg|
+
+######## Windows file test
+
+    fqdn = "example.loc"
+    root_netbios = "EXAMPLE"
+
+    ad_fqdn = "za.example.loc"
+    ad_netbios = "ZA"
+
+    rootdc_name = "ROOTDC"
+    rootdc_ip = "10.10.10.100"
+
+  cfg.vm.define "rootdomaincontroller" do |config|
+    # Use dummy AWS box
+    config.vm.box = "dummy"
+    config.vm.hostname = rootdc_name
+    config.vm.boot_timeout = 600
+    config.vm.guest = "windows"
+
+    # Specify AWS provider configuration
+    config.vm.provider 'aws' do |aws, override|
+      # Read AWS authentication information from environment variables
+      aws.access_key_id = "<add>"
+      aws.secret_access_key = "<add>"
+      aws.session_token = "<add>"
+
+      # Specify SSH keypair to use
+      aws.keypair_name = 'sshkeyname'
+
+      # Specify region, AMI ID, and security group(s)
+      aws.region = "eu-west-1"
+      aws.ami = 'ami-0f8f14284458dda65' #Windows Server 2019 base
+      aws.instance_type = "t3.small"
+      aws.private_ip_address = rootdc_ip
+      aws.security_groups = ['<create security group to add all machines>']
+
+      aws.tags = {
+        'Name' => 'RootDC-EC2'
+      }
+
+      #Will load vagrant to the AWS machine and configure the vagrant account to work with the password of VagrantRocks
+      aws.user_data = File.read('sharedscripts/aws/user_data.txt')
+
+      override.vm.communicator = 'winrm'
+      override.winrm.username = "vagrant"
+      override.winrm.password = "vagrant"
+
+      override.vm.hostname = rootdc_name
+
+      
+      override.ssh.private_key_path = '/path/to/key'
+
+      # Change Public Documents to a different file
+      override.vm.provision "file", source: "../AWS/", destination: "C:/vagrant"
+      override.vm.synced_folder ".", "$HOME", disabled: true
+      
+      override.vm.provision "shell", path: "sharedscripts/ps.ps1", args: "sharedscripts/aws/rename-host.ps1 ROOTDC"
+      override.vm.provision "shell", reboot: true
+
+
+      override.vm.provision "shell", path: "sharedscripts/ps.ps1", args: "sharedscripts/windows/provision-base.ps1 en-ZA"
+      override.vm.provision "shell", reboot: true
+      
+      # Configure DNS
+      override.vm.provision "shell", path: "sharedscripts/ps.ps1", args: "sharedscripts/networking/network-setup.ps1 network-setup-rootdc.ps1 root_dns_entries.csv"
+      override.vm.provision "shell", reboot: true      
+    end
+  end
+end

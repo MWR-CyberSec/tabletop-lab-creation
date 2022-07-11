@@ -1,0 +1,9 @@
+{
+  "name": "za",
+  "fqdn": "za.example.loc",
+  "netbiosName": "ZA",
+  "dn": "DC=za,DC=example,DC=loc",
+  "administratorPassword": "tabletopsissuperfun1@",
+  "safeModeAdministratorPassword": "tabletopsissuperfun1@",
+  "dcIPAddress": "10.10.10.101"
+}
