@@ -6,11 +6,11 @@
 - [Installation](#installation)
     - [Prerequisites](#prerequisites)
 - [Usage: How to provision the network](#usage-how-to-provision-the-network)
-    - [Base Configuration](base-configuration)
-    - [Network Configuration](network-configuration)
-    - [AD Forest Configuration](ad-forest-configuration)
-    - [Windows Configuration](windows-configuration)
-- [Usage: AWS Provisioning](usage-aws-provisioning)
+    - [Base Configuration](#base-configuration)
+    - [Network Configuration](#network-configuration)
+    - [AD Forest Configuration](#ad-forest-configuration)
+    - [Windows Configuration](#windows-configuration)
+- [Usage: AWS Provisioning](#usage-aws-provisioning)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 - [License](#license)
@@ -82,7 +82,7 @@ Once the details are provided, `vagrant up` can be used to provision the ROOTDC 
 
 ## Contributing
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) for more information.
+See [`CONTRIBUTING.MD`](CONTRIBUTING.MD) for more information.
 
 ## License 
 
