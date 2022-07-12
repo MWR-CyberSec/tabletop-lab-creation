@@ -4,6 +4,8 @@
 require 'vagrant-aws'
 # Example of using AWS as vagrant provisioner for the tabletop lab
 
+# This Hash class was necessary as a solution to an undefined Hash method.
+# https://github.com/mitchellh/vagrant-aws/issues/566
 class Hash
   def slice(*keep_keys)
     h = {}
