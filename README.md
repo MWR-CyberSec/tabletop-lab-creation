@@ -1,4 +1,6 @@
-
+<p align="center">
+    <img src="https://github.com/MWR-CyberSec/tabletop-lab-creation/blob/main/tabletop_network_layout.png" width="500px">
+</p>
 > **Tabletop Lab Creation** is a toolset for building a network of Active Directory hosts using Vagrant. These hosts can then be integrated into your SIEM and EDR solution and used to simulate attacks for tabletop exercises. The hosts themselves can also be used for PoC testing of tools.
 
 ### Table of contents 
